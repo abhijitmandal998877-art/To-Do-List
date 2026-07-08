@@ -12,6 +12,9 @@ import android.os.Vibrator
 import android.os.VibratorManager
 import android.os.VibrationEffect
 import androidx.core.app.NotificationCompat
+import android.media.AudioManager
+import android.media.ToneGenerator
+import kotlinx.coroutines.delay
 import com.example.MainActivity
 import com.example.data.AppDatabase
 import kotlinx.coroutines.CoroutineScope
@@ -207,6 +210,8 @@ class ReminderReceiver : BroadcastReceiver() {
 
         if (!soundEnabled) {
             builder.setSilent(true)
+        } else {
+            playTickingAlarmSound(context)
         }
 
         if (vibrationEnabled) {
@@ -222,5 +227,21 @@ class ReminderReceiver : BroadcastReceiver() {
         }
 
         notificationManager.notify(taskId, builder.build())
+    }
+
+    private fun playTickingAlarmSound(context: Context) {
+        CoroutineScope(Dispatchers.Default).launch {
+            try {
+                val toneGenerator = ToneGenerator(AudioManager.STREAM_ALARM, 100)
+                val startTime = System.currentTimeMillis()
+                while (System.currentTimeMillis() - startTime < 4000) {
+                    toneGenerator.startTone(ToneGenerator.TONE_PROP_BEEP, 50)
+                    delay(250) // Tick 4 times a second
+                }
+                toneGenerator.release()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
     }
 }
