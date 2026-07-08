@@ -1,0 +1,6 @@
+{
+  "name": "To Do List",
+  "description": "An elegant, full-featured To-Do List app with list categorization, reminder notifications, calendar sync, dark mode, and an interactive home screen widget.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
